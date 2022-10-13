@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import Card from '../UI/Card'
 import MealItem from './MealItem/MealItem'
 import classes from './AvailableMeals.module.css'
+import { Backdrop, CircularProgress, Card } from '@mui/material'
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchMeals = async () => {
@@ -27,26 +28,33 @@ const AvailableMeals = () => {
         console.log('🚀 ~ fetchMeals ~ mealsArray', mealsArray)
       } catch (error) {
         console.error('error')
+      } finally {
+        setLoading(false)
       }
     }
 
     fetchMeals()
   }, [])
 
-  const mealsList = meals.map((meal) => (
-    <MealItem
-      key={meal.id}
-      id={meal.id}
-      name={meal.name}
-      description={meal.description}
-      price={meal.price}
-    />
-  ))
+  const renderMealsList = () =>
+    meals.map((meal) => (
+      <MealItem
+        key={meal.id}
+        id={meal.id}
+        name={meal.name}
+        description={meal.description}
+        price={meal.price}
+      />
+    ))
 
-  return (
+  return loading ? (
+    <Backdrop open={loading}>
+      <CircularProgress />
+    </Backdrop>
+  ) : (
     <section className={classes.meals}>
       <Card>
-        <ul>{mealsList}</ul>
+        <ul>{renderMealsList()}</ul>
       </Card>
     </section>
   )
