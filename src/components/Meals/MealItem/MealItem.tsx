@@ -3,6 +3,7 @@ import MealItemForm from './MealItemForm'
 import CartContext from '../../../store/cart-context'
 import { Typography, ListItem, Box } from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import { MenuFoodItem } from '../../../interfaces/interfaces'
 
 const useStyles = makeStyles({
   meal: {
@@ -23,17 +24,19 @@ const useStyles = makeStyles({
   },
 })
 
-const MealItem = ({ id, name, description, price }) => {
+const formatPrice = (price: number) => `$${price.toFixed(2)}`
+
+const MealItem = ({ id, name, description, price }: MenuFoodItem) => {
   const classes = useStyles()
   const cartCtx = useContext(CartContext)
-  const formattedPrice = `$${price.toFixed(2)}`
 
-  const addToCartHandler = (amount) => {
+  const addToCartHandler = (amount: number) => {
+    console.log('🚀 ~ addToCartHandler ~ amount', amount)
     cartCtx.addItem({
       id: id,
       name: name,
       amount: amount,
-      price: formattedPrice,
+      price: price,
     })
   }
 
@@ -44,7 +47,7 @@ const MealItem = ({ id, name, description, price }) => {
           {name}
         </Typography>
         <Typography className={classes.description}>{description}</Typography>
-        <Typography className={classes.price}>{formattedPrice}</Typography>
+        <Typography className={classes.price}>{formatPrice(price)}</Typography>
       </Box>
       <Box>
         <MealItemForm onAddToCart={addToCartHandler} />
