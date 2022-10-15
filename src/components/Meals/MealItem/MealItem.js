@@ -1,14 +1,13 @@
 import { useContext } from 'react'
 import MealItemForm from './MealItemForm'
 import CartContext from '../../../store/cart-context'
-import { Typography, MenuItem } from '@mui/material'
+import { Typography, ListItem, Box } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles({
   meal: {
     display: 'flex',
     justifyContent: 'space-between',
-    margin: '1rem',
     paddingBottom: '1rem',
     borderBottom: '1px solid #ccc',
   },
@@ -39,18 +38,18 @@ const MealItem = ({ id, name, description, price }) => {
   }
 
   return (
-    <MenuItem className={classes.meal}>
-      <div>
+    <ListItem className={classes.meal}>
+      <Box>
         <Typography variant='h5' className={classes.name}>
           {name}
         </Typography>
         <Typography className={classes.description}>{description}</Typography>
         <Typography className={classes.price}>{formattedPrice}</Typography>
-      </div>
-      <div>
+      </Box>
+      <Box>
         <MealItemForm onAddToCart={addToCartHandler} />
-      </div>
-    </MenuItem>
+      </Box>
+    </ListItem>
   )
 }
 
