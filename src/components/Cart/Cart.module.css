@@ -13,10 +13,12 @@
   font-weight: bold;
   font-size: 1.5rem;
   margin: 1rem 0;
+  padding: 0 1rem;
 }
 
 .actions {
   text-align: right;
+  padding: 0 1rem;
 }
 
 .actions button {
