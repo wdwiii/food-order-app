@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { TextField, Theme, Grid, Button } from '@mui/material/'
 import { makeStyles } from '@mui/styles'
+import { TextFieldProps } from 'material-ui'
 import classes2 from './Cart.module.css'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -8,10 +9,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 const CheckoutForm = ({
-  handleSubmit,
+  handleConfirmOrder,
   onDialogClose,
 }: {
-  handleSubmit: (event: any) => void
+  handleConfirmOrder: (event: any) => void
   onDialogClose: () => void
 }) => {
   const classes = useStyles()
@@ -20,9 +21,21 @@ const CheckoutForm = ({
   const [zipCode, setZipCode] = useState('' as string)
   const [city, setCity] = useState('' as string)
 
-  const handleConfirmOrder = (event: any) => {
+  const nameInputRef = useRef<TextFieldProps>(null)
+  const streetInputRef = useRef<TextFieldProps>(null)
+  const zipCodeInputRef = useRef<TextFieldProps>(null)
+  const cityInputRef = useRef<TextFieldProps>(null)
+
+  const handleSubmitOrder = (event: any) => {
     event.preventDefault()
-    console.log('hit')
+    const enteredName = nameInputRef.current?.value
+    const enteredStreet = streetInputRef.current?.value
+    const enteredZipCode = zipCodeInputRef.current?.value
+    const enteredCity = cityInputRef.current?.value
+    console.log('🚀 ~ handleConfirmOrder ~ enteredName', enteredName)
+    console.log('🚀 ~ handleConfirmOrder ~ enteredStreet', enteredStreet)
+    console.log('🚀 ~ handleConfirmOrder ~ enteredZipCode', enteredZipCode)
+    console.log('🚀 ~ handleConfirmOrder ~ enteredCity', enteredCity)
   }
 
   const checkoutActions = (
@@ -30,14 +43,14 @@ const CheckoutForm = ({
       <Button className={classes2['button--alt']} onClick={onDialogClose}>
         Cancel
       </Button>
-      <Button onClick={handleSubmit} className={classes2.button}>
+      <Button onClick={handleSubmitOrder} className={classes2.button}>
         Confirm
       </Button>
     </Grid>
   )
 
   return (
-    <form onSubmit={handleConfirmOrder}>
+    <form onSubmit={handleSubmitOrder}>
       <Grid
         container
         item
@@ -50,7 +63,7 @@ const CheckoutForm = ({
             fullWidth
             id='name'
             label='Name'
-            value={name}
+            inputRef={nameInputRef}
             onChange={(e) => setName(e.target.value)}
           />
         </Grid>
@@ -59,7 +72,7 @@ const CheckoutForm = ({
             fullWidth
             id='street'
             label='Street'
-            value={street}
+            inputRef={streetInputRef}
             onChange={(e) => setStreet(e.target.value)}
           />
         </Grid>
@@ -68,7 +81,7 @@ const CheckoutForm = ({
             fullWidth
             id='zipCode'
             label='Zip Code'
-            value={zipCode}
+            inputRef={zipCodeInputRef}
             onChange={(e) => setZipCode(e.target.value)}
           />
         </Grid>
@@ -77,7 +90,7 @@ const CheckoutForm = ({
             label='City'
             fullWidth
             id='city'
-            value={city}
+            inputRef={cityInputRef}
             onChange={(e) => setCity(e.target.value)}
           />
         </Grid>

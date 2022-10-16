@@ -73,7 +73,7 @@ const Cart = (props: any) => {
         <>
           {isCheckout ? (
             <CheckoutForm
-              handleSubmit={handleConfirmOrder}
+              handleConfirmOrder={handleConfirmOrder}
               onDialogClose={props.onClose}
             />
           ) : null}
