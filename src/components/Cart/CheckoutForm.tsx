@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { TextField, Theme, Grid, Button } from '@mui/material/'
+import { TextField, Theme, Grid, Button, FormHelperText } from '@mui/material/'
 import { makeStyles } from '@mui/styles'
 import { TextFieldProps } from 'material-ui'
 import classes2 from './Cart.module.css'
@@ -7,6 +7,9 @@ import classes2 from './Cart.module.css'
 const useStyles = makeStyles((theme: Theme) => ({
   formWrapper: { padding: '1rem' },
 }))
+
+const isEmpty = (value: any) => value?.trim() === ''
+const isInvalidZip = (value: any) => value.trim().length !== 5
 
 const CheckoutForm = ({
   handleConfirmOrder,
@@ -16,10 +19,12 @@ const CheckoutForm = ({
   onDialogClose: () => void
 }) => {
   const classes = useStyles()
-  const [name, setName] = useState('' as string)
-  const [street, setStreet] = useState('' as string)
-  const [zipCode, setZipCode] = useState('' as string)
-  const [city, setCity] = useState('' as string)
+  const [formInputsValidity, setFormInputsValidity] = useState({
+    name: true,
+    street: true,
+    zipCode: true,
+    city: true,
+  })
 
   const nameInputRef = useRef<TextFieldProps>(null)
   const streetInputRef = useRef<TextFieldProps>(null)
@@ -32,10 +37,28 @@ const CheckoutForm = ({
     const enteredStreet = streetInputRef.current?.value
     const enteredZipCode = zipCodeInputRef.current?.value
     const enteredCity = cityInputRef.current?.value
-    console.log('🚀 ~ handleConfirmOrder ~ enteredName', enteredName)
-    console.log('🚀 ~ handleConfirmOrder ~ enteredStreet', enteredStreet)
-    console.log('🚀 ~ handleConfirmOrder ~ enteredZipCode', enteredZipCode)
-    console.log('🚀 ~ handleConfirmOrder ~ enteredCity', enteredCity)
+
+    const enteredNameIsValid = !isEmpty(enteredName)
+    const enteredStreetIsValid = !isEmpty(enteredStreet)
+    const enteredZipCodeIsValid = !isInvalidZip(enteredZipCode)
+    const enteredCityIsValid = !isEmpty(enteredCity)
+
+    setFormInputsValidity({
+      name: enteredNameIsValid,
+      street: enteredStreetIsValid,
+      zipCode: enteredZipCodeIsValid,
+      city: enteredCityIsValid,
+    })
+
+    const formIsValid =
+      enteredNameIsValid &&
+      enteredStreetIsValid &&
+      enteredCityIsValid &&
+      enteredZipCodeIsValid
+
+    if (formIsValid) {
+      console.log('VALID FORM')
+    }
   }
 
   const checkoutActions = (
@@ -60,39 +83,51 @@ const CheckoutForm = ({
       >
         <Grid item xs={12}>
           <TextField
+            error={!formInputsValidity.name}
             fullWidth
             id='name'
             label='Name'
             inputRef={nameInputRef}
-            onChange={(e) => setName(e.target.value)}
           />
+          {!formInputsValidity.name && (
+            <FormHelperText error>Please enter a valid name</FormHelperText>
+          )}
         </Grid>
         <Grid item xs={12}>
           <TextField
+            error={!formInputsValidity.street}
             fullWidth
             id='street'
             label='Street'
             inputRef={streetInputRef}
-            onChange={(e) => setStreet(e.target.value)}
           />
+          {!formInputsValidity.street && (
+            <FormHelperText error>Please enter a valid street</FormHelperText>
+          )}
         </Grid>
         <Grid item xs={12}>
           <TextField
+            error={!formInputsValidity.zipCode}
             fullWidth
             id='zipCode'
             label='Zip Code'
             inputRef={zipCodeInputRef}
-            onChange={(e) => setZipCode(e.target.value)}
           />
+          {!formInputsValidity.zipCode && (
+            <FormHelperText error>Please enter a valid zip code</FormHelperText>
+          )}
         </Grid>
         <Grid item xs={12}>
           <TextField
+            error={!formInputsValidity.city}
             label='City'
             fullWidth
             id='city'
             inputRef={cityInputRef}
-            onChange={(e) => setCity(e.target.value)}
           />
+          {!formInputsValidity.city && (
+            <FormHelperText error>Please enter a valid city</FormHelperText>
+          )}
         </Grid>
         <Grid item>{checkoutActions}</Grid>
       </Grid>
