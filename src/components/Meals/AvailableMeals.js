@@ -19,7 +19,7 @@ const AvailableMeals = () => {
       const response = await fetch(
         'https://react-http-af1c7-default-rtdb.firebaseio.com/meals.json'
       )
-      console.log('🚀 ~ fetchMeals ~ response', response)
+
       if (!response.ok) {
         throw new Error('Something went wrong')
       }

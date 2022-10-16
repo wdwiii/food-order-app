@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, ListItem, Box, Typography, Grid, Theme } from '@mui/material'
+import { Button, ListItem, Box, Typography, Grid } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { Meal } from '../../interfaces/interfaces'
 

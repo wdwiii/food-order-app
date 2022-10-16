@@ -31,7 +31,6 @@ const MealItem = ({ id, name, description, price }: MenuFoodItem) => {
   const cartCtx = useContext(CartContext)
 
   const addToCartHandler = (amount: number) => {
-    console.log('🚀 ~ addToCartHandler ~ amount', amount)
     cartCtx.addItem({
       id: id,
       name: name,
